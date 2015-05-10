@@ -1,0 +1,40 @@
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+using namespace cv;
+
+
+int main(int argc, char* argv[])
+{
+	char k[20];
+	double m;
+	cout << "请输入图片路径" << endl;
+	cin.getline(k, 20);
+	Mat img1 = imread(k, 0);//读取图像
+	
+	if (img1.empty())
+	{
+		cout << "error" << endl;
+	}
+		cout << "请输入对数变换的系数c：" << endl;
+		cin >> m;
+	Mat img2(img1.rows, img1.cols, CV_32FC1);
+	Mat img3(img1.rows, img1.cols, CV_8UC1);
+	for (int i = 0; i < img1.rows; i++)
+	{
+		for (int j = 0; j < img1.cols; j++)
+		{
+			img2.at<float>(i, j) = m*log10(img1.at<uchar>(i, j)+1);
+			
+		}
+	}
+        normalize(img2, img3, 1.0, 0.0, NORM_MINMAX);
+	imwrite("F://对数变换.bmp", img3*255);
+	imshow("原图", img1);
+	imshow("对数变换", img3);
+	waitKey();
+	return 0;
+}
